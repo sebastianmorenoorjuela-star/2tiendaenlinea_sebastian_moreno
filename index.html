@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mi tienda</title>
+  <style>
+    /* ===== Paleta (cambia los colores aquí) ===== */
+    :root {
+      --ciruela: #8f3d68;
+      --ciruela-oscuro: #6e2a4d;
+      --ciruela-medio: #b96d96;
+      --rosa-boton: #c78aaa;
+      --rosa-borde: #e1bfd1;
+      --rosa-suave: #fffafd;
+      --texto: #4b3545;
+      --texto-suave: #6b5262;
+      --oro: #d9b45c;
+      --oro-texto: #8a6414;       /* oro oscuro: se lee bien sobre blanco */
+      --oro-boton-1: #a97c1f;
+      --oro-boton-2: #876213;
+      --alerta: #a8486a;
+      --alerta-oscuro: #873653;
+      --sombra: 143, 61, 104;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    body {
+      font-family: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+      font-size: 18px;
+      line-height: 1.5;
+      background: linear-gradient(135deg, #fff5fa, #f8eafa, #fffaf2) fixed;
+      color: var(--texto);
+      padding: 20px;
+      margin: 0;
+      text-align: center;
+    }
+
+    /* ===== Encabezado ===== */
+
+    h1 {
+      font-family: "Great Vibes", "Brush Script MT", cursive;
+      font-weight: 400;
+      color: var(--ciruela);
+      font-size: clamp(2.8rem, 9vw, 4.4rem);
+      line-height: 1.1;
+      margin: 0 0 8px;
+      text-shadow: 1px 2px 0 #f3d58a;
+    }
+
+    .slogan {
+      color: var(--texto-suave);
+      font-size: clamp(1.15rem, 3vw, 1.4rem);
+      font-style: italic;
+      max-width: 34ch;
+      margin: 0 auto 28px;
+    }
+
+    /* ===== Beneficios de la tienda ===== */
+
+    .beneficios {
+      display: flex;
+      justify-content: center;
+      gap: 12px 35px;
+      flex-wrap: wrap;
+
+      background: linear-gradient(90deg, var(--ciruela), var(--ciruela-medio), var(--ciruela));
+      color: #fff;
+
+      padding: 16px;
+      margin: 0 -20px 32px;   /* ocupa todo el ancho, compensa el padding del body */
+
+      border-top: 2px solid var(--oro);
+      border-bottom: 2px solid var(--oro);
+      box-shadow: 0 4px 12px rgba(var(--sombra), 0.2);
+    }
+
+    .beneficios span {
+      font-size: 16px;
+      letter-spacing: 0.5px;
+    }
+
+    /* ===== Catálogo ===== */
+
+    #productos {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 24px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .producto {
+      display: flex;
+      flex-direction: column;       /* los botones quedan alineados abajo */
+      border: 1px solid var(--rosa-borde);
+      background: rgba(255, 255, 255, 0.96);
+      border-radius: 18px;
+      padding: 12px;
+      width: 220px;
+
+      box-shadow: 0 6px 18px rgba(var(--sombra), 0.13);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .producto:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 26px rgba(var(--sombra), 0.22);
+    }
+
+    .producto img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 12px;
+      border: 1px solid #ead4df;
+    }
+
+    .producto h3 {
+      color: var(--ciruela);
+      margin: 12px 0 6px;
+      font-size: 22px;
+      line-height: 1.2;
+    }
+
+    .descripcion {
+      font-family: system-ui, Arial, sans-serif;
+      font-size: 14px;
+      color: var(--texto-suave);
+      min-height: 42px;
+      margin: 0 0 8px;
+    }
+
+    .precio {
+      font-family: system-ui, Arial, sans-serif;
+      font-size: 19px;
+      font-weight: bold;
+      color: var(--oro-texto);
+      margin: 0 0 6px;
+    }
+
+    /* ===== Botones (base compartida) ===== */
+
+    button {
+      font-family: inherit;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 999px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease,
+                  background 0.2s ease, color 0.2s ease;
+    }
+
+    button:focus-visible {
+      outline: 3px solid var(--oro);
+      outline-offset: 3px;
+    }
+
+    button:active {
+      transform: scale(0.97);
+    }
+
+    /* Botón de cada producto */
+
+    .producto button {
+      margin-top: auto;               /* se pega al fondo de la tarjeta */
+      padding: 10px 16px;
+      color: #fff;
+      background: linear-gradient(135deg, #b7699a, var(--ciruela));
+      border: 1px solid var(--ciruela);
+    }
+
+    .producto button:hover {
+      transform: scale(1.04);
+      box-shadow: 0 4px 10px rgba(var(--sombra), 0.28);
+    }
+
+    /* ===== Carrito ===== */
+
+    .carrito {
+      margin-top: 40px;
+      padding: 25px;
+      background: var(--rosa-suave);
+      border: 1px solid var(--rosa-borde);
+      border-radius: 18px;
+      text-align: left;
+      display: inline-block;
+      width: 100%;
+      max-width: 420px;
+      min-width: 0;
+
+      box-shadow: 0 7px 20px rgba(var(--sombra), 0.15);
+    }
+
+    .carrito h2 {
+      margin-top: 0;
+      color: var(--ciruela);
+      text-align: center;
+    }
+
+    #lista-carrito {
+      padding-left: 20px;
+    }
+
+    #lista-carrito li {
+      margin-bottom: 8px;
+      color: #5e4654;
+    }
+
+    /* ===== Resumen ===== */
+
+    .resumen {
+      border-top: 1px solid #e4cbd7;
+      margin-top: 15px;
+      padding-top: 10px;
+    }
+
+    .total {
+      font-size: 22px;
+      font-weight: bold;
+      color: var(--oro-texto);
+    }
+
+    /* ===== Botón vaciar ===== */
+
+    .vaciar {
+      background: transparent;
+      border: 1.5px solid var(--alerta);
+      color: var(--alerta);
+      padding: 10px 16px;
+      margin-top: 10px;
+    }
+
+    .vaciar:hover {
+      background: var(--alerta);
+      color: #fff;
+    }
+
+    /* ===== Botón finalizar ===== */
+
+    .finalizar {
+      background: linear-gradient(135deg, var(--oro-boton-1), var(--oro-boton-2));
+      border: none;
+      color: #fff;
+      padding: 11px 18px;
+      margin-top: 10px;
+      margin-left: 5px;
+      font-weight: bold;
+      box-shadow: 0 3px 8px rgba(138, 100, 20, 0.3);
+    }
+
+    .finalizar:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 14px rgba(138, 100, 20, 0.38);
+    }
+
+    /* ===== Celulares ===== */
+
+    @media (max-width: 480px) {
+      body { padding: 14px; }
+      .beneficios { margin: 0 -14px 26px; gap: 8px 20px; }
+      .producto { width: 100%; max-width: 320px; }
+      .finalizar { margin-left: 0; }
+    }
+
+    /* ===== Reducir movimiento ===== */
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        transition: none !important;
+        animation: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!DOCTYPE html>
+  <html lang="es">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sueños de Princesa</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;1,500&family=Great+Vibes&display=swap" rel="stylesheet">
+  </head>
+  <body style="margin:0; padding:20px; background:#fff;">
+
+  <div class="hero-princesa">
+    <span class="destello d1" aria-hidden="true">✦</span>
+    <span class="destello d2" aria-hidden="true">✧</span>
+    <span class="destello d3" aria-hidden="true">✦</span>
+
+    <div class="corona" aria-hidden="true">♕</div>
+
+    <h1>Sueños de Princesa</h1>
+
+    <p class="slogan">Donde cada princesa encuentra su cuento de hadas</p>
+
+    <div class="linea-real" aria-hidden="true">
+      <span></span><i>✧</i><span></span>
+    </div>
+  </div>
+
+  <style>
+    .hero-princesa {
+      --rosa-fondo: #fff0f7;
+      --rosa: #f8d9e8;
+      --ciruela: #8f3d68;
+      --texto: #6f4b5d;
+      --oro: #d9a441;
+      --oro-claro: #f3d58a;
+
+      position: relative;
+      overflow: hidden;
+      text-align: center;
+      padding: 56px 24px 48px;
+      background:
+        radial-gradient(circle at 15% 20%, rgba(255,255,255,.9), transparent 40%),
+        radial-gradient(circle at 85% 80%, rgba(243,213,138,.35), transparent 45%),
+        linear-gradient(135deg, var(--rosa-fondo), var(--rosa) 55%, #fff7fb);
+      border: 2px solid var(--oro);
+      border-radius: 25px;
+      /* segundo borde interior, como marco real */
+      outline: 1px solid var(--oro-claro);
+      outline-offset: -10px;
+      box-shadow: 0 8px 25px rgba(180, 100, 140, 0.18);
+    }
+
+    .hero-princesa .corona {
+      font-size: 34px;
+      line-height: 1;
+      color: var(--oro);
+      margin-bottom: 8px;
+    }
+
+    .hero-princesa h1 {
+      margin: 0;
+      font-family: "Great Vibes", "Brush Script MT", cursive;
+      font-weight: 400;
+      font-size: clamp(2.8rem, 9vw, 4.6rem);
+      line-height: 1.1;
+      color: var(--ciruela);
+      text-shadow: 1px 2px 0 var(--oro-claro);
+    }
+
+    .hero-princesa .slogan {
+      margin: 14px auto 0;
+      max-width: 32ch;
+      color: var(--texto);
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(1.1rem, 3vw, 1.4rem);
+      font-style: italic;
+      line-height: 1.4;
+    }
+
+    .linea-real {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      margin-top: 24px;
+      color: var(--oro);
+    }
+
+    .linea-real span {
+      height: 1px;
+      width: min(28vw, 140px);
+      background: linear-gradient(90deg, transparent, var(--oro));
+    }
+
+    .linea-real span:last-child {
+      background: linear-gradient(270deg, transparent, var(--oro));
+    }
+
+    .linea-real i {
+      font-style: normal;
+      font-size: 20px;
+    }
+
+    /* Destellos */
+    .destello {
+      position: absolute;
+      color: var(--oro);
+      animation: brillo 3.2s ease-in-out infinite;
+    }
+    .d1 { top: 18px; right: 28px; font-size: 26px; }
+    .d2 { top: 60px; left: 34px; font-size: 18px; animation-delay: 1s; }
+    .d3 { bottom: 24px; right: 18%; font-size: 14px; animation-delay: 2s; }
+
+    @keyframes brillo {
+      0%, 100% { opacity: .35; transform: scale(.85); }
+      50%      { opacity: 1;   transform: scale(1.15); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .destello { animation: none; opacity: .8; }
+    }
+  </style>
+
+  </body>
+  </html>
+
+  <div class="beneficios">
+    <span>🚚 Envíos en Bogotá</span>
+    <span>🔒 Compra segura</span>
+    <span>📦 Seguimiento de pedido</span>
+  </div>
+
+  <div id="productos"></div>
+
+  <div class="carrito">
+    <h2>🧾 Carrito de Compras</h2>
+
+    <ul id="lista-carrito"></ul>
+
+    <div class="resumen">
+      <p>
+        Envío: <strong>Gratis</strong>
+      </p>
+
+      <p class="total">
+        Total: $<span id="total">0</span>
+      </p>
+    </div>
+
+    <button class="vaciar" onclick="vaciarCarrito()">
+      🧼 Vaciar Carrito
+    </button>
+
+    <button class="finalizar" onclick="finalizarCompra()">
+      ✅ Finalizar Compra
+    </button>
+  </div>
+
+  <script>
+    const productos = [
+      {
+        id: 1,
+        nombre: "Blanca Nieves Sublime",
+        descripcion: "🍎✨Blanca Nieves Sublime✨🍎¡Un disfraz de cuento de hadas que te hará sentir como la más encantadora del reino!",
+        precio: 25000,
+        imagen: "https://disfracescachivaches.com/images/DNY-108-1.jpg"
+      },
+      {
+        id: 2,
+        nombre: "Bella Sublime",
+        descripcion: "🌹✨ Bella Sublime ✨🌹¡Un disfraz de cuento de hadas que te hará sentir como la princesa más hermosa y encantadora de toda la historia!",
+        precio: 18000,
+        imagen: "https://disfracescachivaches.com/images/DNY-0111-1.jpg"
+      },
+      {
+        id: 3,
+        nombre: "Aurora Sublime",
+        descripcion: "🌸✨ Aurora Sublime ✨🌸¡Un disfraz de cuento de hadas que te hará sentir como la princesa más soñadora, elegante y encantadora del reino!",
+        precio: 30000,
+        imagen: "https://disfracescachivaches.com/images/DNY-0109-1.jpg"
+      },
+      {
+        id: 4,
+        nombre: "Cenicienta Aniversario",
+        descripcion: "👠✨ Cenicienta Aniversario ✨👠¡Un disfraz de cuento de hadas que te hará sentir como la princesa más deslumbrante del reino!",
+        precio: 18000,
+        imagen: "https://disfracescachivaches.com/images/DNY-0072-4.jpg"
+      },
+      {
+        id: 5,
+        nombre: "REINA MALVADA",
+        descripcion: "🍎👑 Reina Malvada 👑🍎¡Un disfraz de cuento de hadas que te hará sentir como la reina más poderosa, elegante y misteriosa del reino!",
+        precio: 22000,
+        imagen: "https://disfracescachivaches.com/images/DNY-221-1.jpg"
+      }
+    ];
+
+
+    /* ==============================
+       CARRITO
+    ================================ */
+
+    const carrito = [];
+
+    const contenedorProductos = document.getElementById("productos");
+    const listaCarrito = document.getElementById("lista-carrito");
+    const totalCarrito = document.getElementById("total");
+
+
+    /* ==============================
+       MOSTRAR PRODUCTOS
+    ================================ */
+
+    function mostrarProductos() {
+
+      contenedorProductos.innerHTML = "";
+
+      productos.forEach(prod => {
+
+        const div = document.createElement("div");
+
+        div.className = "producto";
+
+        div.innerHTML = `
+          <img src="${prod.imagen}" alt="${prod.nombre}">
+
+          <h3>${prod.nombre}</h3>
+
+          <p class="descripcion">
+            ${prod.descripcion}
+          </p>
+
+          <p class="precio">
+            ${prod.precio.toLocaleString("es-CO", {
+              style: "currency",
+              currency: "COP",
+              minimumFractionDigits: 0
+            })}
+          </p>
+
+          <button onclick="agregarAlCarrito(${prod.id})">
+            Agregar al carrito
+          </button>
+        `;
+
+        contenedorProductos.appendChild(div);
+
+      });
+
+    }
+
+
+    /* ==============================
+       AGREGAR AL CARRITO
+    ================================ */
+
+    function agregarAlCarrito(id) {
+
+      const productoExistente =
+        carrito.find(p => p.id === id);
+
+      if (productoExistente) {
+
+        productoExistente.cantidad++;
+
+      } else {
+
+        const producto =
+          productos.find(p => p.id === id);
+
+        carrito.push({
+          ...producto,
+          cantidad: 1
+        });
+
+      }
+
+      actualizarCarrito();
+
+    }
+
+
+    /* ==============================
+       ACTUALIZAR CARRITO
+    ================================ */
+
+    function actualizarCarrito() {
+
+      listaCarrito.innerHTML = "";
+
+      let total = 0;
+      let totalItems = 0;
+
+      carrito.forEach(item => {
+
+        const li =
+          document.createElement("li");
+
+        const subtotal =
+          item.precio * item.cantidad;
+
+        li.textContent =
+          `${item.nombre} x${item.cantidad} — ` +
+          subtotal.toLocaleString("es-CO", {
+            style: "currency",
+            currency: "COP",
+            minimumFractionDigits: 0
+          });
+
+        listaCarrito.appendChild(li);
+
+        total += subtotal;
+        totalItems += item.cantidad;
+
+      });
+
+      totalCarrito.textContent =
+        total.toLocaleString("es-CO");
+
+      actualizarTituloCarrito(totalItems);
+
+    }
+
+
+    /* ==============================
+       CONTADOR DEL CARRITO
+    ================================ */
+
+    function actualizarTituloCarrito(cantidad) {
+
+      const titulo =
+        document.querySelector(".carrito h2");
+
+      titulo.textContent =
+        `🧾 Carrito de Compras (${cantidad})`;
+
+    }
+
+
+    /* ==============================
+       VACIAR CARRITO
+    ================================ */
+
+    function vaciarCarrito() {
+
+      if (carrito.length === 0) {
+
+        alert("🛒 El carrito ya está vacío.");
+
+        return;
+
+      }
+
+      if (
+        confirm(
+          "¿Estás seguro de que quieres vaciar el carrito?"
+        )
+      ) {
+
+        carrito.length = 0;
+
+        actualizarCarrito();
+
+      }
+
+    }
+
+
+    /* ==============================
+       FINALIZAR COMPRA
+    ================================ */
+
+    function finalizarCompra() {
+
+      if (carrito.length === 0) {
+
+        alert(
+          "🛒 Tu carrito está vacío. Agrega productos antes de finalizar la compra."
+        );
+
+        return;
+
+      }
+
+      alert(
+        "🎉 ¡Pedido simulado confirmado!\n\n" +
+        "En un eCommerce real, ahora entrarían en acción " +
+        "el backend, la pasarela de pago y la logística."
+      );
+
+      carrito.length = 0;
+
+      actualizarCarrito();
+
+    }
+
+
+    /* ==============================
+       INICIAR TIENDA
+    ================================ */
+
+    mostrarProductos();
+  </script>
+</body>
+</html>
